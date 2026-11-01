@@ -1,0 +1,4 @@
+npm run spend -- price-variance
+  entity  invoice  supplier              item      uom   currency  quantity  unit price  baseline  comparison gap
+  ------  -------  --------------------  --------  ----  --------  --------  ----------  --------  --------------
+  KORU    B101     Southern Bolt Supply  BOLT-M10  each  NZD       100.0000  3.0000      2.0000    100.00

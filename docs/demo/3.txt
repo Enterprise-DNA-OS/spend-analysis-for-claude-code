@@ -1,0 +1,12 @@
+npm run spend -- compliance
+  entity  invoice  rule                 finding                                                                  
+  ------  -------  -------------------  -------------------------------------------------------------------------
+  KORU    B101     PO_POLICY            Purchase order reference missing under this entity policy                
+  KORU    F100     NZ_RETENTION         Retention date is missing or earlier than standard March tax-year minimum
+  KORU    F100     SOURCE_EVIDENCE      No retained invoice reference recorded                                   
+  KORU    U100     CATEGORY_REVIEW      Category not assigned                                                    
+  KORU    U100     NZ_RETENTION         Retention date is missing or earlier than standard March tax-year minimum
+  KORU    U100     PO_POLICY            Purchase order reference missing under this entity policy                
+  KORU    U100     SOURCE_EVIDENCE      No retained invoice reference recorded                                   
+  KORU    U100     SUPPLIER_MAPPING     Supplier alias has not been reconciled                                   
+  TASMAN  AU100    JURISDICTION_REVIEW  Non-NZ retention needs local review; no legal rule applied

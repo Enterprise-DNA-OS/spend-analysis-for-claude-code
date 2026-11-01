@@ -1,0 +1,8 @@
+npm run spend -- supplier-spend
+  entity  supplier                  currency  lines  net spend  gross purchases  gross share pct  supplier names
+  ------  ------------------------  --------  -----  ---------  ---------------  ---------------  --------------
+  KORU    Southern Bolt Supply      NZD       3      480.00     500.00           46.30            2             
+  KORU    Unknown Industrial        NZD       1      400.00     400.00           37.04            1             
+  KORU    Harbour Freight Services  NZD       1      180.00     180.00           16.67            1             
+  KORU    Southern Bolt Supply      USD       1      90.00      90.00            100.00           1             
+  TASMAN  Southern Bolt Supply      AUD       1      210.00     210.00           100.00           1
