@@ -1,115 +1,99 @@
-<h1 align="center">Spend Analysis for Claude Code</h1>
+# Spend Analysis for Claude Code
 
-<p align="center">
-  <strong>The open-source spend analysis system that is just a database and Claude Code.</strong>
-</p>
+See which suppliers take the purchasing budget, which prices differ and which savings have evidence. Keep the purchasing record in a database you own.
 
-<p align="center">
-  Created by <a href="https://www.enterprisedna.co"><strong>Enterprise DNA</strong></a>. Free and open source. Works with Claude Code, Codex, OpenCode or Cursor.
-</p>
+| Do it yourself | We customise it | We run it for you |
+|---|---|---|
+| Free, MIT licensed. Install the fictional purchasing week. | Your supplier names, category rules, source-file mappings and management views. | Installed and operated through Omni by Enterprise DNA. One setup fee, then a retainer. |
+| [Quick start](#quick-start) | [Get your version built](https://enterprisedna.co/omni/book?offer=replace-software&utm_campaign=unit4-spend-analytics&utm_medium=customise) | [Book a call](https://enterprisedna.co/omni/book?offer=replace-software&utm_campaign=unit4-spend-analytics&utm_medium=managed) |
 
-<!-- three-doors -->
-<table align="center">
-  <tr>
-    <td align="center"><strong>Do it yourself</strong><br/>Clone it, run it, own it. Free, MIT.<br/><a href="#quick-start">Quick start</a></td>
-    <td align="center"><strong>We customise it</strong><br/>Your fields, your rules, your Unit4 Spend Analytics data brought across.<br/><a href="https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=unit4-spend-analytics">Book a call</a></td>
-    <td align="center"><strong>We run it for you</strong><br/>Installed, connected and operated inside Omni. Setup fee, then a retainer.<br/><a href="https://enterprisedna.co/omni/instead-of/unit4-spend-analytics?utm_source=github&utm_medium=readme&utm_campaign=unit4-spend-analytics">How it works</a></td>
-  </tr>
-</table>
-
-<p align="center">
-  <a href="#what-is-this">What is this</a> &bull;
-  <a href="#why-no-front-end">Why no front end</a> &bull;
-  <a href="#quick-start">Quick start</a> &bull;
-  <a href="#the-commands">Commands</a> &bull;
-  <a href="#instead-of-unit4-spend-analytics">Instead of Unit4 Spend Analytics</a> &bull;
-  <a href="#want-it-installed-and-run-for-you">Installed for you</a> &bull;
-  <a href="#license">License</a>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Node-20+-339933?style=flat-square" alt="Node 20+" />
-  <img src="https://img.shields.io/badge/PostgreSQL-any-336791?style=flat-square" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/PGlite-embedded-3ecf8e?style=flat-square" alt="PGlite" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT License" />
-</p>
-
----
-
-## What is this
-
-Spend Analysis for Claude Code does the job you pay Unit4 Spend Analytics for, as a Postgres database and a set of agent commands. There is no web front end. You open the folder in [Claude Code](https://claude.com/claude-code) (or Codex, OpenCode, Cursor: see `AGENTS.md`) and ask for what you want in plain language. It runs the right query, and it can answer questions the Unit4 Spend Analytics dashboard cannot.
-
-<!-- TODO(author): the annual bill. One sentence: what a 10 to 50 person business typically pays Unit4 Spend Analytics per year, all in, with a source. -->
-
-Want the same thing with a web front end, or built on a different stack? That is a customisation, and it is exactly what Enterprise DNA does: [book a call](https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=unit4-spend-analytics).
-
-<!-- TODO(author): two or three sentences on what this specific product covers and who it is for. -->
-
-## Why no front end
-
-- The front end was only ever there because the database was hard to talk to. That is no longer true.
-- Your data sits in plain Postgres tables you own. Any tool can read them. No export, no lock-in.
-- No seats, no tiers, no add-ons. Read [docs/why-no-front-end.md](docs/why-no-front-end.md) for the honest trade-offs too.
+For finance and purchasing teams reviewing spend across business units. Runs with Claude Code, Codex, OpenCode or Cursor. This is a transaction analysis and review system. Unit4's broader service includes managed data preparation, connections and other sourcing modules. [Research and scope](docs/research.md).
 
 ## Quick start
 
-Sixty seconds, no database install (an embedded Postgres runs inside Node):
+Node 20 or later, Windows or Linux:
 
 ```bash
 git clone https://github.com/Enterprise-DNA-OS/spend-analysis-for-claude-code.git
 cd spend-analysis-for-claude-code
 npm install
 npm run demo
+npm test
+npm run view
+npm run docs
 ```
 
-Then open the folder in Claude Code and type a slash command. <!-- TODO(author): name the first command to try. -->
+The demo is fictional. It contains supplier aliases, a credit, NZD, AUD and USD purchases, two missing source references, a stale business unit and an overdue review. Repeating the seed preserves changes. PGlite stores the local database under .data/db; DATABASE_URL selects Postgres. Local PGlite supports one process at a time.
 
-### Use it with your own Postgres or Supabase
+Use a fresh DATA_DIR or Postgres database for business records. Run migrate there, register the entities and categories, then import. Do not seed business records. Real import files, generated documents and exports are ignored by Git. The checked-in fixture contains fictional records only.
 
-Copy `.env.example` to `.env`, set `DATABASE_URL`, then `npm run migrate`. Same commands, shared data, no per-seat fee.
+## Five weekly jobs
 
-## The commands
+1. /supplier-spend: reconcile supplier names and inspect concentration by business unit and currency.
+2. /price-variance: compare purchases of the same item and unit within each entity and currency.
+3. /missing-po: investigate missing purchase order references under the entity's policy.
+4. /savings: separate proposed estimates from evidence-backed realised savings.
+5. /weekly-review: combine supplier spend, price comparisons and overdue actions.
 
-<!-- TODO(author): a table of the slash commands in .claude/commands and what each one does. -->
+36 CLI commands and 38 slash recipes ship with the project. Every CLI command accepts --json. [Command arguments and examples](docs/cli.md).
 
-| Command | What it does |
+## Ten questions answered today
+
+Unit4 offers configurable analysis. These questions are demonstrated in this build; no claim is made that Unit4 cannot answer them.
+
+| Question | Command |
 |---|---|
-| `/...` | ... |
+| Which supplier names belong to the same business? | aliases |
+| Which suppliers account for most gross purchases in each currency? | supplier-spend |
+| What did each category cost after credits? | category-spend |
+| Which comparable item purchases have a higher unit price? | price-variance |
+| Which invoices have no purchase order reference where one is required? | missing-po |
+| Which supplier names still need matching? | unmapped-suppliers |
+| Which source records look like the same invoice line twice? | duplicates |
+| Which business unit has old purchasing data? | freshness |
+| Which proposed savings are overdue and still unverified? | attention |
+| Which records lack invoice evidence or a reviewed retention date? | compliance |
 
-## Instead of Unit4 Spend Analytics
+## Numbers you can trace
 
-<!-- TODO(author): how to bring data across from Unit4 Spend Analytics; link docs/replace-unit4-spend-analytics.md -->
+Currencies and business units stay separate. Net spend includes credits. Supplier concentration uses positive purchases so credits cannot distort the denominator. The price comparison groups by entity, item, unit and currency, and excludes credits and lines without a positive quantity. It compares all imported history, not a selected accounting period. Delivery terms, rebates, tax treatment, quality and effective dates still need review. A comparison gap is not a promised saving.
 
-## Architecture
+Amounts must use the same tax basis within a dataset, preferably excluding recoverable tax. The importer does not infer tax or exchange rates. It retains every source column and rejects a changed source key. Financial source fields are immutable; corrections use separately keyed adjusting lines. Category and evidence changes retain their audit history. Supplier remapping changes historical grouping and records its before/after mapping.
 
+Verified savings require a positive realised amount and an evidence reference. This records the reviewer's assertion; it does not independently verify a contract, invoice, or saving. Names supplied with --actor are labels, not authenticated signatures.
+
+## Bring the purchasing history
+
+```bash
+npm run spend -- import unit4 --file=fixtures/unit4-example.csv --source=unit4 --actor="Demo operator" --dry-run
+npm run spend -- import unit4 --file=fixtures/unit4-example.csv --source=unit4 --actor="Demo operator"
 ```
-spend-analysis-for-claude-code/
-  CLAUDE.md                 how the operator wants this run (routing table + house rules)
-  AGENTS.md                 the same, for Codex / OpenCode / Cursor / Gemini CLI
-  .claude/commands/         the slash commands
-  scripts/                  the CLI the commands drive
-  scripts/lib/db.mjs        one adapter: DATABASE_URL (pg) or embedded PGlite
-  supabase/migrations/      plain SQL schema
-  supabase/seed.sql         demo data
-  docs/                     the thesis and the migration guide
-```
 
-## Built for coding agents
+The fixture uses documented headings for this importer. Unit4 publishes tabular source-data support, not a universal Spend Analytics export specification. Obtain transaction-level records from your Unit4 report or the original finance source, save as CSV UTF-8, and map the headings with --map when needed. A source key must uniquely identify a line. Summaries alone cannot reconstruct invoice history. [Cutover and mapping guide](docs/replace-unit4-spend-analytics.md).
 
-The database, CLI and command recipes work with Claude Code, Codex, OpenCode or Cursor. Ask your coding agent for a new command and have it implement and test the change against the same records.
+## Your first hour: ten things to ask for
 
-## Contributing
+1. Put our business name and logo on the supplier review.
+2. Show the share of purchases going to our largest supplier.
+3. Explain why the two Southern Bolt names are grouped together.
+4. Show the difference between gross purchases and net spend after credits.
+5. Find invoices without a purchase order reference.
+6. Show which imported invoice dates are stale.
+7. Draft the Monday purchasing review without sending it.
+8. Add our cost-centre field through /customise.
+9. Add a financial-year view through /new-view.
+10. Map a sample export, preview it and reconcile the totals before import.
 
-Issues and pull requests are welcome. Keep the shape: plain SQL, a small CLI, a slash command per recurring job, no front end.
+## Paperwork and read-only views
 
-## Want it installed and run for you?
+npm run docs produces supplier review packs, invoice evidence registers and savings verification working papers as branded HTML. npm run view produces the purchasing week and evidence snapshots. Change brand.json for your name, logo and colours. Open the files locally or print them to PDF. [What a screen adds](docs/why-no-front-end.md).
 
-Enterprise DNA installs Spend Analysis for Claude Code for your business, migrates your Unit4 Spend Analytics data, connects it to the rest of your tools, and runs it for you as part of **Omni**, our managed Command Center. One setup fee, then a monthly retainer.
+## Checks and operation
 
-- Book a call: [enterprisedna.co/omni/book](https://enterprisedna.co/omni/book/?offer=replace-software&utm_source=github&utm_medium=readme&utm_campaign=unit4-spend-analytics)
-- Read more: [enterprisedna.co/omni/instead-of/unit4-spend-analytics](https://enterprisedna.co/omni/instead-of/unit4-spend-analytics?utm_source=github&utm_medium=readme&utm_campaign=unit4-spend-analytics)
+npm test uses a temporary database and exercises every CLI command. It checks credits, currency separation, supplier mappings, atomic imports, replay protection, evidence changes, immutable source fields, draft generation and escaped HTML. TEST_DATABASE_URL optionally targets a fresh disposable Postgres database. The manual CI workflow defines Windows, Linux and Postgres checks. See the run report for which environments were actually tested.
 
-## License
+The NZ retention check assumes a standard 31 March tax year. It flags a missing date or one earlier than seven tax years after that year-end. It never deletes records. Australian and other entities are explicitly flagged for local review. [Sources and limits](docs/compliance.md).
 
-MIT. Copyright (c) 2026 Enterprise DNA.
+export writes all nine record sets to JSON. It refuses to overwrite an existing file. This is an interchange snapshot, not an automatic restore. Back up the database and referenced evidence separately. Shared deployment needs authenticated access, scoped roles and tested recovery; public database access is revoked.
+
+MIT licensed. Not affiliated with Unit4, Scanmarket or Anthropic. Hosting and agent subscriptions have separate costs. [Book 30 minutes with Sam](https://enterprisedna.co/omni/book?offer=replace-software&utm_campaign=unit4-spend-analytics&utm_medium=readme).

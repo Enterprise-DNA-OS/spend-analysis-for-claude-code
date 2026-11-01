@@ -1,13 +1,34 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Spend Analysis for Claude Code: what needs attention, rendered by npm run view",
+    "title": "The purchasing week",
+    "subtitle": "Read-only snapshot. Keep currencies separate. Comparisons are not realised savings.",
     "sections": [
       {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "title": "Supplier concentration",
+        "sql": "select * from spend.supplier_spend order by entity,currency,gross_purchases desc"
+      },
+      {
+        "title": "Price comparisons",
+        "sql": "select entity,invoice,item,uom,currency,unit_price,baseline,comparison_gap from spend.price_variance order by invoice"
+      },
+      {
+        "title": "Outstanding reviews",
+        "sql": "select title,owner,due_on from spend.reviews where status='open' order by due_on"
+      }
+    ]
+  },
+  {
+    "name": "evidence",
+    "title": "Spend evidence and source freshness",
+    "sections": [
+      {
+        "title": "Evidence checks",
+        "sql": "select entity,invoice,rule,finding from spend.evidence_gaps order by entity,invoice"
+      },
+      {
+        "title": "Latest invoice dates",
+        "sql": "select * from spend.freshness order by entity"
       }
     ]
   }

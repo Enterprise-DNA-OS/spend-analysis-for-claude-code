@@ -1,0 +1,2 @@
+Source Key,Entity,Supplier,Invoice,Line,Invoice Date,Description,Item,UOM,Quantity,Amount,Currency,PO,Contract,Evidence,Retain Until,Category
+NEW-1,KORU,Southern Bolt,N100,1,2026-10-01,Demo bolts,BOLT-M10,each,100,250.00,NZD,PO-DEMO,,invoice:N100,2035-03-31,Components

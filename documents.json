@@ -1,11 +1,52 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
-    "file": "name",
+    "name": "supplier-review",
+    "title": "Supplier purchasing review draft",
+    "for_each": "select id,code from spend.suppliers",
+    "file": "code",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Supplier",
+        "layout": "record",
+        "sql": "select code,name from spend.suppliers where id=$1"
+      },
+      {
+        "title": "Purchasing history",
+        "sql": "select entity,invoice,invoice_on,currency,amount,category,po from spend.enriched where supplier_id=$1 order by invoice_on"
+      },
+      {
+        "title": "Recorded name mappings",
+        "sql": "select source_system,alias,reason from spend.aliases where supplier_id=$1"
+      }
+    ]
+  },
+  {
+    "name": "evidence-register",
+    "title": "Invoice evidence register draft",
+    "for_each": "select id,code from spend.entities",
+    "file": "code",
+    "sections": [
+      {
+        "title": "Records",
+        "sql": "select invoice,invoice_on,currency,amount,evidence_ref,retain_until from spend.enriched where entity_id=$1 order by invoice_on"
+      },
+      {
+        "title": "Review findings",
+        "sql": "select g.invoice,g.rule,g.finding from spend.evidence_gaps g join spend.lines l on l.id=g.id where l.entity_id=$1 order by g.invoice"
+      }
+    ]
+  },
+  {
+    "name": "savings-review",
+    "title": "Savings verification working paper",
+    "for_each": "select id,title from spend.savings",
+    "file": "title",
+    "sections": [
+      {
+        "title": "Evidence and decision",
+        "layout": "record",
+        "sql": "select title,owner,currency,estimate,basis,realised,status,evidence_ref from spend.savings where id=$1"
+      }
     ]
   }
 ]

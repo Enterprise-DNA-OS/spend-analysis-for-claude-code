@@ -1,5 +1,3 @@
-# Slash commands
+# Purchasing recipes
 
-One file per recurring job. Each command tells Claude Code exactly which CLI command to run and how to present the result, so the operator never re-explains the job.
-
-Add a command every time the same ask comes twice. Frontmatter needs a `description:` line. The body is the brief.
+Read CLAUDE.md and docs/cli.md. Each recipe uses scripts/spend.mjs. No recipe sends messages or publishes records. The 36 CLI commands have matching recipes, with /customise and /new-view for changes.
