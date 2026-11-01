@@ -74,6 +74,13 @@ try{
  ok((await db.query("select source_payload->>'Row Identity' value from spend.lines where source_key='MAPPED-1'"))[0].value==='MAPPED-1','original payload preserved');
  // Separate keys can represent duplicates; report them for review rather than deleting evidence.
  fs.writeFileSync(file,original.replace('NEW-1','POSSIBLE-DUPLICATE'));await imp();ok((await call('duplicates')).length===1,'duplicate invoice review');
+ // Two separate supplier identities may have exactly the same display name.
+ await write('add-supplier','--code=BOLT-OTHER','--name=Southern Bolt Supply');
+ await write('map-supplier','--source=unit4','--alias=Other Southern Bolt','--supplier=BOLT-OTHER','--reason=Different registered business');
+ fs.writeFileSync(file,original.replace('NEW-1','OTHER-SUPPLIER').replace('Southern Bolt,','Other Southern Bolt,'));await imp();
+ const identities=(await call('supplier-spend')).filter(r=>r.entity==='KORU'&&r.currency==='NZD'&&r.supplier==='Southern Bolt Supply');
+ ok(identities.length===2&&new Set(identities.map(r=>r.supplier_key)).size===2,'same-name suppliers stay separate');
+ ok(Number((await call('duplicates'))[0].copies)===3,'different supplier identity not a duplicate invoice');
  const csv=parseCsv('\ufeffName,Note\r\n"One","line 1\nline 2 ""quoted"""\r\n');ok(csv[0].Note.includes('"quoted"'),'CSV multiline and quotes');
  assert.throws(()=>parseCsv('A,A\nx,y'),/unique/);assert.throws(()=>parseCsv('A,B\nx'),/expected/);checks+=2;
  const snapshot=path.join(temp,'snapshot.json');const exp=await call('export',`--out=${snapshot}`);ok(Object.keys(exp.counts).length===9,'all datasets exported');
